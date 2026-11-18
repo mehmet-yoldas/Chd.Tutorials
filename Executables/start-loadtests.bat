@@ -1,5 +1,6 @@
 @echo off
 REM CHD Coordination - NBomber Load Tests Quick Start (Windows)
+cd /d "%~dp0.."
 
 echo ======================================
 echo CHD Coordination - Load Tests
@@ -37,7 +38,7 @@ if %errorlevel% neq 0 (
     set /p start_monitoring="Start Grafana monitoring? (y/n): "
     if /i "%start_monitoring%"=="y" (
         echo.
-        call start-monitoring.bat
+        call "%~dp0start-monitoring.bat"
         echo.
     )
 )

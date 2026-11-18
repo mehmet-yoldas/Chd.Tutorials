@@ -504,7 +504,7 @@ public class Program
                 else
                 {
                     Console.WriteLine("❌ Could not start monitoring stack automatically");
-                    Console.WriteLine("   📖 Manual setup: run start-monitoring.bat");
+                    Console.WriteLine("   📖 Manual setup: run Executables\\start-monitoring.bat");
                     Console.WriteLine();
                 }
             }
@@ -513,7 +513,7 @@ public class Program
                 Console.WriteLine();
                 Console.WriteLine("ℹ️  Continuing without monitoring");
                 Console.WriteLine("   💡 You can start it later:");
-                Console.WriteLine("   • Run: start-monitoring.bat");
+                Console.WriteLine("   • Run: Executables\\start-monitoring.bat");
                 Console.WriteLine("   • Or restart this program and select 'y'");
                 Console.WriteLine();
             }

@@ -106,7 +106,7 @@ Usage examples documentation:
 ### 4. Project Structure
 
 ```
-Chd.Examples/
+Chd.Tutorials/
 ├── Chd.Coordination.Examples/     (NEW)
 │   ├── Program.cs
 │   ├── DistributedLockExample.cs
@@ -130,9 +130,9 @@ Chd.Examples/
 │
 ├── README.md                      (Turkish - Mapping benchmark)
 ├── README.EN.md                   (NEW - English)
-├── IMPLEMENTATION_SUMMARY.md      (Turkish)
-├── IMPLEMENTATION_SUMMARY.EN.md   (NEW - English)
-└── Chd.Examples.slnx             (UPDATED)
+├── Docs/IMPLEMENTATION_SUMMARY.md (Turkish)
+├── Docs/IMPLEMENTATION_SUMMARY.EN.md (NEW - English)
+└── Chd.Tutorials.slnx            (UPDATED)
 ```
 
 ## 📊 Statistics

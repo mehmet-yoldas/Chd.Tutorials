@@ -9,7 +9,7 @@ docker-compose -f docker-compose.monitoring.yml down
 docker-compose -f docker-compose.monitoring.yml up -d
 ```
 
-**Veya** basitçe `test-metrics.bat` çalıştırın!
+**Veya** basitçe `Executables\test-metrics.bat` çalıştırın!
 
 ---
 
@@ -25,7 +25,7 @@ Artık **sadece F5 basarak** hem load test çalışır hem de Grafana'da metrikl
 
 ```
 File → Open → Project/Solution
-→ Chd.Examples.sln seç
+→ Chd.Tutorials.slnx seç
 ```
 
 ### 2. Startup Project Ayarla
@@ -136,7 +136,7 @@ Open Grafana dashboard in browser? (y/n): _
 ### Önceden (Manuel):
 ```sh
 # Terminal 1
-.\start-monitoring.bat
+.\Executables\start-monitoring.bat
 
 # Terminal 2
 cd Chd.LoadTests

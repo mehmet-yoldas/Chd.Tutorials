@@ -8,7 +8,7 @@ Host application for [Chd.Workflow](https://www.nuget.org/packages/Chd.Workflow)
 |---|---|---|
 | [Chd.Workflow](https://www.nuget.org/packages/Chd.Workflow) | .NET engine. Definitions, instances, actions, guards, and the REST API. | [NuGet](https://www.nuget.org/packages/Chd.Workflow) · [source](https://github.com/mehmet-yoldas/library-core) |
 | [qp-workflow-react](https://www.npmjs.com/package/qp-workflow-react) | React designer, inbox, and runner. It does not store workflow state. | [npm](https://www.npmjs.com/package/qp-workflow-react) · [source](https://github.com/mehmet-yoldas/library-core) |
-| [Chd.Examples](https://github.com/mehmet-yoldas/Chd.Examples) | This repository. The host that wires the engine to the React UI. | [API](https://github.com/mehmet-yoldas/Chd.Examples/tree/master/Workflow/Chd.Workflow.Sample) · [UI](https://github.com/mehmet-yoldas/Chd.Examples/tree/master/Workflow/chd-workflow-sample-ui) |
+| [Chd.Tutorials](https://github.com/mehmet-yoldas/Chd.Examples) | This repository. The host that wires the engine to the React UI. | [API](https://github.com/mehmet-yoldas/Chd.Examples/tree/master/Workflow/Chd.Workflow.Sample) · [UI](https://github.com/mehmet-yoldas/Chd.Examples/tree/master/Workflow/chd-workflow-sample-ui) |
 
 Chd.Workflow persists definitions and instances. The React package renders the designer, inbox, and runner. This sample hosts both.
 

@@ -223,7 +223,7 @@ Report location: ./reports/2024-01-15_14-30-00/report.html
    ```
    Çalışmıyorsa:
    ```sh
-   .\start-monitoring.bat
+   .\Executables\start-monitoring.bat
    ```
 
 2. ✅ **Solution'ı build edin:**
@@ -369,7 +369,7 @@ Visual Studio'da:
 
 - **NBomber Docs**: https://nbomber.com/docs/overview
 - **Visual Studio Debugging**: https://learn.microsoft.com/en-us/visualstudio/debugger/
-- **k6 vs NBomber**: `../K6_VS_NBOMBER.md`
+- **k6 vs NBomber**: `../Docs/K6_VS_NBOMBER.md`
 - **Load Test README**: `./README.md`
 
 ---

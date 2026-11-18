@@ -6,7 +6,7 @@
 
 ```sh
 # Windows
-.\start-monitoring.bat
+.\Executables\start-monitoring.bat
 
 # Linux/Mac
 ./start-monitoring.sh
@@ -49,7 +49,7 @@ cd Chd.LoadTests
 dotnet run
 
 # Option 3: Otomatik
-.\start-loadtests.bat
+.\Executables\start-loadtests.bat
 ```
 
 **Çıktı:**
@@ -312,7 +312,7 @@ docker-compose -f docker-compose.monitoring.yml up -d
 
 **Terminal 1: Monitoring**
 ```sh
-.\start-monitoring.bat
+.\Executables\start-monitoring.bat
 ```
 
 **Terminal 2: Load Test**
@@ -426,7 +426,7 @@ Metrikleri export edin:
 - **PromQL Tutorial**: https://prometheus.io/docs/prometheus/latest/querying/basics/
 - **Grafana Docs**: https://grafana.com/docs/
 - **NBomber Metrics**: https://nbomber.com/docs/reporting-sinks
-- **This Project**: `../MONITORING_SETUP.md`
+- **This Project**: `MONITORING_SETUP.md`
 
 ---
 

@@ -5,7 +5,7 @@ echo ============================================
 echo.
 
 echo [1] Restarting monitoring stack...
-cd /d "%~dp0"
+cd /d "%~dp0.."
 docker-compose -f docker-compose.monitoring.yml down
 timeout /t 2 /nobreak >nul
 docker-compose -f docker-compose.monitoring.yml up -d

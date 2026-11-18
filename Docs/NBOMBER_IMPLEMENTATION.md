@@ -119,7 +119,7 @@ Concurrent scenarios:
 
 **Usage:**
 ```bash
-.\start-loadtests.bat
+.\Executables\start-loadtests.bat
 ```
 
 ---
@@ -210,7 +210,7 @@ Concurrent scenarios:
 ```markdown
 ### Run Load Tests
 # Quick start (checks Redis, starts monitoring)
-.\start-loadtests.bat
+.\Executables\start-loadtests.bat
 
 # Or manual
 cd Chd.LoadTests
@@ -307,7 +307,7 @@ dotnet run
 ### Quick Run
 ```bash
 # Windows
-.\start-loadtests.bat
+.\Executables\start-loadtests.bat
 
 # Linux/Mac
 ./start-loadtests.sh
@@ -343,14 +343,14 @@ dotnet run
 ## Project Structure
 
 ```
-Chd.Examples/
+Chd.Tutorials/
 ├── Chd.LoadTests/                    # NEW
 │   ├── Chd.LoadTests.csproj          # NEW - NBomber project
 │   ├── Program.cs                     # NEW - 4 test scenarios
 │   └── README.md                      # NEW - 700+ lines docs
-├── start-loadtests.bat               # NEW - Windows quick start
-├── start-loadtests.sh                # NEW - Linux/Mac quick start
-├── K6_VS_NBOMBER.md                  # NEW - Comparison guide
+├── Executables/start-loadtests.bat   # Windows quick start
+├── start-loadtests.sh                # Linux/Mac quick start
+├── Docs/K6_VS_NBOMBER.md             # Comparison guide
 ├── README.md                          # UPDATED - Added NBomber sections
 ├── docker-compose.monitoring.yml     # EXISTING - Monitoring stack
 ├── loadtest.js                        # EXISTING - k6 alternative
@@ -455,7 +455,7 @@ Chd.Examples/
 - ✅ CI/CD examples
 
 ### Time to Value
-- **Setup:** < 5 minutes (`.\start-loadtests.bat`)
+- **Setup:** < 5 minutes (`.\Executables\start-loadtests.bat`)
 - **First test:** < 1 minute (select scenario, press Enter)
 - **Results:** Immediate (console + HTML report)
 - **Grafana:** Real-time (if monitoring stack running)
@@ -467,4 +467,4 @@ Chd.Examples/
 
 ---
 
-**🚀 Ready to use! Press F5 or run `.\start-loadtests.bat` to get started.**
+**🚀 Ready to use! Press F5 or run `.\Executables\start-loadtests.bat` to get started.**

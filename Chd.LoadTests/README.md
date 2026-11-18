@@ -43,7 +43,7 @@ This project provides production-grade load testing scenarios for:
    docker run -d -p 6379:6379 redis:7-alpine
    
    # OR use monitoring stack
-   .\start-monitoring.bat
+   .\Executables\start-monitoring.bat
    ```
 
 2. **Restore packages**:
@@ -216,7 +216,7 @@ dotnet trace Chd.LoadTests
 ## 📊 Grafana Integration
 
 ### View Live Metrics
-1. Start monitoring stack: `.\start-monitoring.bat`
+1. Start monitoring stack: `.\Executables\start-monitoring.bat`
 2. Run load test in separate terminal
 3. Open dashboard: http://localhost:3000/d/chd-coordination
 4. Watch metrics update in real-time
@@ -372,7 +372,7 @@ dotnet run -c Release
 - **NBomber Documentation**: https://nbomber.com/docs/overview
 - **Chd.Coordination Examples**: ../Chd.Coordination.Examples/
 - **Unit Tests**: ../Chd.UnitTest/
-- **Monitoring Setup**: ../MONITORING_SETUP.md
+- **Monitoring Setup**: ../Docs/MONITORING_SETUP.md
 
 ## 🤝 Contributing
 

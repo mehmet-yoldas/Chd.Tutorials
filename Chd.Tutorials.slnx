@@ -22,17 +22,28 @@
     <Project Path="ChdRoslynMapping.Banchmark/ChdRoslynMapping.Banchmark.csproj" Id="443eeced-989c-430d-9816-298643812aca" />
     <Project Path="ChdRoslynMapping.Test/ChdRoslynMapping.Test.csproj" Id="1381cb32-a7f3-4f68-91bb-480d12927149" />
   </Folder>
+  <Folder Name="/Docs/">
+    <File Path="Docs/DEVTO_ARTICLE.md" />
+    <File Path="Docs/DEVTO_ARTICLE.tr.md" />
+    <File Path="Docs/GRAFANA_GUIDE.md" />
+    <File Path="Docs/GRAFANA_METRICS_FIX.md" />
+    <File Path="Docs/IMPLEMENTATION_SUMMARY.md" />
+    <File Path="Docs/K6_VS_NBOMBER.md" />
+    <File Path="Docs/LOADTEST_README.md" />
+    <File Path="Docs/METRICS_TROUBLESHOOTING.md" />
+    <File Path="Docs/MONITORING_SETUP.md" />
+    <File Path="Docs/NBOMBER_IMPLEMENTATION.md" />
+  </Folder>
+  <Folder Name="/Executables/">
+    <File Path="Executables/start-loadtests.bat" />
+    <File Path="Executables/start-monitoring.bat" />
+    <File Path="Executables/test-metrics.bat" />
+  </Folder>
   <Folder Name="/RealWorldScenarios/">
     <Project Path="Chd.Coordination.Examples/Chd.Coordination.Examples.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
-    <File Path="start-monitoring.bat" />
-  </Folder>
-  <Folder Name="/Solution Items/Documents/">
-    <File Path="DEVTO_ARTICLE.md" />
-    <File Path="DEVTO_ARTICLE.tr.md" />
-    <File Path="IMPLEMENTATION_SUMMARY.md" />
   </Folder>
   <Folder Name="/WorkflowDemo/">
     <Project Path="Workflow/chd-workflow-sample-ui/chd-workflow-sample-ui.esproj">

@@ -1,5 +1,6 @@
 @echo off
 REM CHD Coordination - Grafana Monitoring Quick Start (Windows)
+cd /d "%~dp0.."
 
 echo ======================================
 echo CHD Coordination - Monitoring Setup

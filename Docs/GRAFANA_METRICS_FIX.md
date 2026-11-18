@@ -12,7 +12,7 @@ Dashboard'daki metrik sorguları güncellendi ve doğru metrik isimlerini kullan
 
 ### 1️⃣ Metrikleri Test Et (Otomatik)
 ```bash
-test-metrics.bat
+Executables\test-metrics.bat
 ```
 
 Bu script otomatik olarak:
@@ -67,7 +67,7 @@ Grafana otomatik olarak açılacak:
 - ✅ Unit'ler düzeltildi (milisaniye → saniye)
 
 ### 2. Yeni Dosyalar Eklendi
-- ✅ `test-metrics.bat` - Hızlı test scripti
+- ✅ `Executables\test-metrics.bat` - Hızlı test scripti
 - ✅ `METRICS_TROUBLESHOOTING.md` - Detaylı sorun giderme rehberi
 - ✅ `GRAFANA_METRICS_FIX.md` - Bu dosya
 
@@ -177,7 +177,7 @@ docker logs chd-grafana
 
 ## ✅ Kontrol Listesi
 
-- [ ] `test-metrics.bat` çalıştırıldı
+- [ ] `Executables\test-metrics.bat` çalıştırıldı
 - [ ] Prometheus targets sayfasında `chd-loadtests` **UP** durumda
 - [ ] Visual Studio'da load test başlatıldı
 - [ ] http://localhost:9091/metrics adresinde `chd_*` metrikleri görünüyor

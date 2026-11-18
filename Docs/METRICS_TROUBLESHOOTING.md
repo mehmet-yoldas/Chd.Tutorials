@@ -18,7 +18,7 @@ Grafana dashboard'unuzdaki metrik sorguları güncellendi. Şimdi doğru metrik 
 
 ### 1️⃣ Monitoring Stack'i Yeniden Başlat
 ```bash
-test-metrics.bat
+Executables\test-metrics.bat
 ```
 Bu script otomatik olarak:
 - Monitoring stack'i yeniden başlatır
@@ -176,7 +176,7 @@ Dashboard şu 6 paneli içeriyor:
 ## 💡 Pro İpuçları
 
 1. **Test çalıştırmadan önce**:
-   - `test-metrics.bat` ile tüm servisleri kontrol et
+   - `Executables\test-metrics.bat` ile tüm servisleri kontrol et
    - Prometheus targets sayfasını aç
 
 2. **Test sırasında**:
