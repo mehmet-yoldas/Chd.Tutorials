@@ -18,36 +18,21 @@ public class Program
         Console.WriteLine("===========================================");
         Console.WriteLine();
 
-        // Check Docker and Monitoring Stack
-        CheckAndStartMonitoring();
+        var choice = SelectScenario(args);
+        if (choice is not ("1" or "2" or "3" or "4" or "5" or "6"))
+        {
+            Console.WriteLine("Invalid choice. Exiting...");
+            return;
+        }
+
+        var dashboardUid = DashboardFor(choice);
+        CheckAndStartMonitoring(dashboardUid);
 
         // Start Prometheus metrics server
         _prometheusServer = new PrometheusServer(port: 9091);
         _prometheusServer.Start();
         Console.WriteLine("[INFO] Prometheus metrics available at: http://localhost:9091/metrics");
         Console.WriteLine();
-
-        // Check for auto-select from launch settings or command line
-        string? choice = null;
-
-        if (args.Length > 0)
-        {
-            choice = args[0];
-            Console.WriteLine($"[Auto-selected] Scenario {choice}");
-            Console.WriteLine();
-        }
-        else
-        {
-            Console.WriteLine("Available scenarios:");
-            Console.WriteLine("  1. Distributed Lock Performance Test");
-            Console.WriteLine("  2. Idempotency Performance Test");
-            Console.WriteLine("  3. Saga Performance Test");
-            Console.WriteLine("  4. Mixed Workload Test");
-            Console.WriteLine("  5. Run ALL Tests");
-            Console.WriteLine();
-            Console.Write("Select scenario (1-5): ");
-            choice = Console.ReadLine();
-        }
 
         try
         {
@@ -70,13 +55,16 @@ public class Program
                 case "5":
                     RunAllTests();
                     break;
+                case "6":
+                    MappingComparisonTest.Run();
+                    break;
                 default:
                     Console.WriteLine("Invalid choice. Exiting...");
                     break;
             }
 
             // Test completed - keep server running so user can check Grafana
-            if (choice is "1" or "2" or "3" or "4" or "5")
+            if (choice is "1" or "2" or "3" or "4" or "5" or "6")
             {
                 Console.WriteLine();
                 Console.WriteLine("========================================");
@@ -84,7 +72,7 @@ public class Program
                 Console.WriteLine("========================================");
                 Console.WriteLine();
                 Console.WriteLine("📊 View your results:");
-                Console.WriteLine("   • Grafana Dashboard: http://localhost:3000/d/chd-coordination");
+                Console.WriteLine($"   • Grafana Dashboard: {MonitoringHelper.DashboardUrl(dashboardUid)}");
                 Console.WriteLine("   • Prometheus Metrics: http://localhost:9091/metrics");
                 Console.WriteLine("   • NBomber HTML Report: Check the reports folder");
                 Console.WriteLine();
@@ -381,7 +369,37 @@ public class Program
         return services.BuildServiceProvider();
     }
 
-    private static void CheckAndStartMonitoring()
+    private static string? SelectScenario(string[] args)
+    {
+        if (args.Length > 0)
+        {
+            Console.WriteLine($"[Auto-selected] Scenario {args[0]}");
+            Console.WriteLine();
+            return args[0];
+        }
+
+        Console.WriteLine("Available scenarios:");
+        Console.WriteLine("  1. Distributed Lock Performance Test");
+        Console.WriteLine("  2. Idempotency Performance Test");
+        Console.WriteLine("  3. Saga Performance Test");
+        Console.WriteLine("  4. Mixed Workload Test");
+        Console.WriteLine("  5. Run ALL Tests");
+        Console.WriteLine("  6. Mapping Comparison (CHD vs AutoMapper)");
+        Console.WriteLine();
+        Console.Write("Select scenario (1-6): ");
+        return Console.ReadLine();
+    }
+
+    private static string DashboardFor(string choice) => choice switch
+    {
+        "1" => "chd-lock",
+        "2" => "chd-idempotency",
+        "3" => "chd-saga",
+        "6" => "chd-mapping",
+        _ => "chd-coordination"
+    };
+
+    private static void CheckAndStartMonitoring(string dashboardUid)
     {
         Console.WriteLine("========================================");
         Console.WriteLine("   Monitoring Stack Check");
@@ -427,17 +445,10 @@ public class Program
             Console.WriteLine();
             Console.WriteLine("📊 Metrics available at:");
             Console.WriteLine("   • Grafana:    http://localhost:3000 (admin/admin)");
-            Console.WriteLine("   • Dashboard:  http://localhost:3000/d/chd-coordination");
+            Console.WriteLine($"   • Dashboard:  {MonitoringHelper.DashboardUrl(dashboardUid)}");
             Console.WriteLine("   • Prometheus: http://localhost:9090");
             Console.WriteLine();
-
-            // Ask if user wants to open Grafana
-            Console.Write("Open Grafana dashboard in browser? (y/n): ");
-            var openBrowser = Console.ReadLine();
-            if (openBrowser?.ToLower() == "y")
-            {
-                MonitoringHelper.OpenGrafanaDashboard();
-            }
+            MonitoringHelper.OpenGrafanaDashboard(dashboardUid);
         }
         else
         {
@@ -463,58 +474,27 @@ public class Program
                 Console.WriteLine();
             }
 
-            Console.Write("🚀 Start monitoring stack now? (y/n): ");
-            var answer = Console.ReadLine();
+            Console.WriteLine("Starting the monitoring stack so this test can be shown in Grafana.");
+            Console.WriteLine();
 
-            if (answer?.ToLower() == "y")
+            var solutionDir = MonitoringHelper.GetSolutionDirectory();
+            Console.WriteLine($"   Solution directory: {solutionDir}");
+            Console.WriteLine();
+
+            bool success = missingImages.Count > 0
+                ? MonitoringHelper.StartMonitoringStackWithProgress(solutionDir)
+                : MonitoringHelper.StartMonitoringStack(solutionDir);
+
+            if (success)
             {
-                var solutionDir = MonitoringHelper.GetSolutionDirectory();
-                Console.WriteLine($"   Solution directory: {solutionDir}");
+                Console.WriteLine("✅ Monitoring stack started successfully!");
                 Console.WriteLine();
-
-                bool success;
-                if (missingImages.Count > 0)
-                {
-                    // First-time setup with progress
-                    success = MonitoringHelper.StartMonitoringStackWithProgress(solutionDir);
-                }
-                else
-                {
-                    // Quick start (images already cached)
-                    success = MonitoringHelper.StartMonitoringStack(solutionDir);
-                }
-
-                if (success)
-                {
-                    Console.WriteLine("✅ Monitoring stack started successfully!");
-                    Console.WriteLine();
-                    Console.WriteLine("📊 Access your metrics:");
-                    Console.WriteLine("   • Grafana Dashboard: http://localhost:3000/d/chd-coordination");
-                    Console.WriteLine("   • Login: admin / admin");
-                    Console.WriteLine();
-
-                    // Ask if user wants to open Grafana
-                    Console.Write("Open Grafana dashboard in browser? (y/n): ");
-                    var openBrowser = Console.ReadLine();
-                    if (openBrowser?.ToLower() == "y")
-                    {
-                        MonitoringHelper.OpenGrafanaDashboard();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("❌ Could not start monitoring stack automatically");
-                    Console.WriteLine("   📖 Manual setup: run Executables\\start-monitoring.bat");
-                    Console.WriteLine();
-                }
+                MonitoringHelper.OpenGrafanaDashboard(dashboardUid);
             }
             else
             {
-                Console.WriteLine();
-                Console.WriteLine("ℹ️  Continuing without monitoring");
-                Console.WriteLine("   💡 You can start it later:");
-                Console.WriteLine("   • Run: Executables\\start-monitoring.bat");
-                Console.WriteLine("   • Or restart this program and select 'y'");
+                Console.WriteLine("❌ Could not start monitoring stack automatically");
+                Console.WriteLine("   📖 Manual setup: run Executables\\start-monitoring.bat");
                 Console.WriteLine();
             }
         }

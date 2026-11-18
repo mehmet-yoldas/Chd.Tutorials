@@ -64,6 +64,36 @@ public static class PrometheusMetrics
     );
 
     // Summary'ler - Percentile hesaplamaları için
+    public static readonly Counter MappingItems = Metrics.CreateCounter(
+        "chd_mapping_items_total",
+        "Total number of mapped items",
+        new CounterConfiguration { LabelNames = new[] { "mapper", "status" } }
+    );
+
+    public static readonly Histogram MappingItemLatency = Metrics.CreateHistogram(
+        "chd_mapping_item_duration_seconds",
+        "Average single-item mapping duration in seconds",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "mapper" },
+            Buckets = new[]
+            {
+                1e-8, 2e-8, 5e-8, 1e-7, 2e-7, 5e-7,
+                1e-6, 2e-6, 5e-6, 1e-5, 5e-5, 1e-4
+            }
+        }
+    );
+
+    public static readonly Histogram MappingBatchLatency = Metrics.CreateHistogram(
+        "chd_mapping_batch_duration_seconds",
+        "Batch mapping duration in seconds",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "mapper" },
+            Buckets = Histogram.ExponentialBuckets(0.00001, 2, 12)
+        }
+    );
+
     public static readonly Summary OperationLatency = Metrics.CreateSummary(
         "chd_operation_latency_seconds",
         "Operation latency summary",

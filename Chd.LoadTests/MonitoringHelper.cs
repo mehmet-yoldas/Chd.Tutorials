@@ -99,7 +99,7 @@ public static class MonitoringHelper
                 Console.WriteLine("[SUCCESS] Monitoring stack started!");
                 Console.WriteLine("          - Grafana:    http://localhost:3000 (admin/admin)");
                 Console.WriteLine("          - Prometheus: http://localhost:9090");
-                Console.WriteLine("          - Dashboard:  http://localhost:3000/d/chd-coordination");
+                Console.WriteLine("          - Grafana home: http://localhost:3000");
                 Console.WriteLine();
                 
                 // Wait for services to be ready
@@ -124,11 +124,14 @@ public static class MonitoringHelper
         }
     }
 
-    public static void OpenGrafanaDashboard()
+    public static string DashboardUrl(string uid) =>
+        $"http://localhost:3000/d/{uid}?from=now-15m&to=now&refresh=5s";
+
+    public static void OpenGrafanaDashboard(string uid)
     {
+        var url = DashboardUrl(uid);
         try
         {
-            var url = "http://localhost:3000/d/chd-coordination";
             
             // Windows
             if (OperatingSystem.IsWindows())
@@ -157,7 +160,7 @@ public static class MonitoringHelper
         catch (Exception ex)
         {
             Console.WriteLine($"[WARNING] Could not open browser: {ex.Message}");
-            Console.WriteLine("          Please open manually: http://localhost:3000/d/chd-coordination");
+            Console.WriteLine($"          Please open manually: {url}");
             Console.WriteLine();
         }
     }

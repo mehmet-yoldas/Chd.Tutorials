@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Chd.Mapping.Bechmark;
@@ -36,7 +37,8 @@ public class MappingBenchmark
         };
 
 
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
+        services.AddLogging();
         services.AddAutoMapper(cfg => cfg.AddProfile<OrderProfile>());
         var provider = services.BuildServiceProvider();
         _mapper = provider.GetRequiredService<AutoMapper.IMapper>();

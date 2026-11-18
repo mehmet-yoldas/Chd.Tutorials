@@ -1,0 +1,11 @@
+2026-11-19 00:47:07.922 +03:00 [INF] [ThreadId:1] NBomber 6.0.0 started a new session: 2026-11-18_21.47.80_session_7d126a71
+2026-11-19 00:47:08.042 +03:00 [INF] [ThreadId:1] NBomber started as single node
+2026-11-19 00:47:08.046 +03:00 [INF] [ThreadId:1] License validation....
+2026-11-19 00:47:08.046 +03:00 [WRN] [ThreadId:1] THIS VERSION IS FREE ONLY FOR PERSONAL USE. You can't use it for an organization.
+2026-11-19 00:47:08.167 +03:00 [INF] [ThreadId:1] Reports folder: C:\Projects\Examples\Chd.LoadTests\bin\Release\net8.0\reports\2026-11-18_21.47.80_session_7d126a71
+2026-11-19 00:47:08.168 +03:00 [INF] [ThreadId:1] Plugins: no plugins were loaded
+2026-11-19 00:47:08.169 +03:00 [INF] [ThreadId:1] Reporting sinks: no reporting sinks were loaded
+2026-11-19 00:47:08.169 +03:00 [INF] [ThreadId:1] Starting init...
+2026-11-19 00:47:08.178 +03:00 [INF] [ThreadId:1] Target scenarios: distributed_lock_test
+2026-11-19 00:47:08.180 +03:00 [INF] [ThreadId:1] Init finished
+2026-11-19 00:47:08.323 +03:00 [INF] [ThreadId:1] Starting bombing...

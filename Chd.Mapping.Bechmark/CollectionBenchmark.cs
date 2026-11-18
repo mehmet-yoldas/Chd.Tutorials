@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 // using AutoMapper.Extensions.Microsoft.DependencyInjection; // not used to avoid ambiguity
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
@@ -33,6 +34,7 @@ public class CollectionBenchmark
         }
 
         var services = new ServiceCollection();
+        services.AddLogging();
         services.AddAutoMapper(cfg => cfg.CreateMap<OrderDto, OrderEntity>()
                 .ForMember(d => d.NetTotal,
                     o => o.MapFrom(s => s.Price * (s.Tax + 100) / 100 - s.Discount))

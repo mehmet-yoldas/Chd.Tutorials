@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Chd.LoadTests/Chd.LoadTests.csproj" DefaultStartup="true" />
   <Folder Name="/Benchmarks/">
     <Project Path="Chd.Coordination.Benchmark/Chd.Coordination.Benchmark.csproj" />
     <Project Path="Chd.Mapping.Bechmark/Chd.Mapping.Bechmark.csproj" />
@@ -52,5 +53,4 @@
     </Project>
     <Project Path="Workflow/Chd.Workflow.Sample/Chd.Workflow.Sample.csproj" />
   </Folder>
-  <Project Path="Chd.LoadTests/Chd.LoadTests.csproj" />
 </Solution>
