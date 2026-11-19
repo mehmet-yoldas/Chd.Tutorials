@@ -67,7 +67,7 @@ if exist "docker-compose.monitoring.yml" (
     docker ps | findstr "chd-grafana" >nul 2>&1
     if %errorlevel% equ 0 (
         echo View live metrics:
-        echo   http://localhost:3000/d/chd-coordination
+        echo   http://localhost:3000
         echo.
     )
 )

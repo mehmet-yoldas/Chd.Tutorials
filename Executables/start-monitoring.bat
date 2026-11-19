@@ -105,8 +105,8 @@ echo.
 echo   - Prometheus: http://localhost:9090
 echo   - Redis:      localhost:6379
 echo.
-echo View dashboard:
-echo   http://localhost:3000/d/chd-coordination
+echo View dashboards:
+echo   http://localhost:3000
 echo.
 echo Run load tests:
 echo   k6 run loadtest.js

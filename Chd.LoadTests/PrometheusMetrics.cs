@@ -8,7 +8,7 @@ public static class PrometheusMetrics
     public static readonly Counter LockOperations = Metrics.CreateCounter(
         "chd_lock_operations_total",
         "Total number of lock operations",
-        new CounterConfiguration { LabelNames = new[] { "status" } }
+        new CounterConfiguration { LabelNames = new[] { "status", "contention" } }
     );
 
     public static readonly Counter IdempotencyOperations = Metrics.CreateCounter(
@@ -26,10 +26,11 @@ public static class PrometheusMetrics
     // Histogram'lar - Latency ölçümü için
     public static readonly Histogram LockLatency = Metrics.CreateHistogram(
         "chd_lock_duration_seconds",
-        "Lock operation duration in seconds",
+        "Lock acquire, work, and release duration in seconds",
         new HistogramConfiguration
         {
-            Buckets = Histogram.ExponentialBuckets(0.001, 2, 10) // 1ms'den başla, 10 bucket
+            LabelNames = new[] { "contention" },
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 10)
         }
     );
 
@@ -91,6 +92,32 @@ public static class PrometheusMetrics
         {
             LabelNames = new[] { "mapper" },
             Buckets = Histogram.ExponentialBuckets(0.00001, 2, 12)
+        }
+    );
+
+    public static readonly Counter LoggingCalls = Metrics.CreateCounter(
+        "chd_logging_calls_total",
+        "Logged method calls",
+        new CounterConfiguration { LabelNames = new[] { "library", "event", "status" } }
+    );
+
+    public static readonly Histogram LoggingCallLatency = Metrics.CreateHistogram(
+        "chd_logging_call_duration_seconds",
+        "Duration of one logged method call",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "library", "event" },
+            Buckets = Histogram.ExponentialBuckets(0.00001, 2, 16)
+        }
+    );
+
+    public static readonly Histogram LoggingBatchLatency = Metrics.CreateHistogram(
+        "chd_logging_batch_duration_seconds",
+        "Duration of a 100-call logging batch",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "library", "event" },
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 14)
         }
     );
 

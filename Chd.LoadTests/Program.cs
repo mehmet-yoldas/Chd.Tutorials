@@ -19,7 +19,7 @@ public class Program
         Console.WriteLine();
 
         var choice = SelectScenario(args);
-        if (choice is not ("1" or "2" or "3" or "4" or "5" or "6"))
+        if (choice is not ("1" or "2" or "3" or "4" or "5" or "6" or "7"))
         {
             Console.WriteLine("Invalid choice. Exiting...");
             return;
@@ -58,13 +58,16 @@ public class Program
                 case "6":
                     MappingComparisonTest.Run();
                     break;
+                case "7":
+                    LoggingComparisonTest.Run();
+                    break;
                 default:
                     Console.WriteLine("Invalid choice. Exiting...");
                     break;
             }
 
             // Test completed - keep server running so user can check Grafana
-            if (choice is "1" or "2" or "3" or "4" or "5" or "6")
+            if (choice is "1" or "2" or "3" or "4" or "5" or "6" or "7")
             {
                 Console.WriteLine();
                 Console.WriteLine("========================================");
@@ -96,51 +99,58 @@ public class Program
     private static void RunLockTest()
     {
         Console.WriteLine("\n[Running] Distributed Lock Load Test...\n");
+        Console.WriteLine("   Aynı 50 ms iş, iki kilit türü:");
+        Console.WriteLine("   • Kendi anahtarı: her istek ayrı kilit alır, kimseyle beklemez.");
+        Console.WriteLine("   • Ortak anahtar: bütün istekler aynı kilidi bekler.");
+        Console.WriteLine();
 
         var serviceProvider = CreateServiceProvider();
 
-        var scenario = Scenario.Create("distributed_lock_test", async context =>
+        NBomber.Contracts.ScenarioProps CreateLockScenario(string scenarioName, string contention, bool sharedKey)
         {
-            var coordinator = serviceProvider.GetRequiredService<ICoordinator>();
-            var resourceId = $"resource:{context.ScenarioInfo.InstanceNumber}";
-
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-            try
+            return Scenario.Create(scenarioName, async context =>
             {
-                await coordinator.Lock.RunAsync(
-                    resourceId,
-                    ttl: TimeSpan.FromSeconds(5),
-                    action: async ct =>
-                    {
-                        await Task.Delay(50, ct); // Simulate work
-                    }
-                );
+                var coordinator = serviceProvider.GetRequiredService<ICoordinator>();
+                var resourceId = sharedKey
+                    ? "resource:shared"
+                    : $"resource:{context.ScenarioInfo.InstanceNumber}";
 
-                stopwatch.Stop();
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                try
+                {
+                    await coordinator.Lock.RunAsync(
+                        resourceId,
+                        ttl: TimeSpan.FromSeconds(5),
+                        action: async ct =>
+                        {
+                            await Task.Delay(50, ct);
+                        }
+                    );
 
-                // Record metrics
-                PrometheusMetrics.LockOperations.WithLabels("success").Inc();
-                PrometheusMetrics.LockLatency.Observe(stopwatch.Elapsed.TotalSeconds);
-                PrometheusMetrics.OperationLatency.WithLabels("lock").Observe(stopwatch.Elapsed.TotalSeconds);
-
-                return Response.Ok();
-            }
-            catch (Exception ex)
-            {
-                stopwatch.Stop();
-                PrometheusMetrics.LockOperations.WithLabels("failed").Inc();
-                Console.WriteLine($"Lock failed: {ex.Message}");
-                return Response.Fail();
-            }
-        })
-        .WithoutWarmUp()
-        .WithLoadSimulations(
-            Simulation.Inject(rate: 10, interval: TimeSpan.FromSeconds(1), during: TimeSpan.FromMinutes(2)),
-            Simulation.Inject(rate: 20, interval: TimeSpan.FromSeconds(1), during: TimeSpan.FromMinutes(1))
-        );
+                    stopwatch.Stop();
+                    PrometheusMetrics.LockOperations.WithLabels("success", contention).Inc();
+                    PrometheusMetrics.LockLatency.WithLabels(contention).Observe(stopwatch.Elapsed.TotalSeconds);
+                    PrometheusMetrics.OperationLatency.WithLabels("lock").Observe(stopwatch.Elapsed.TotalSeconds);
+                    return Response.Ok();
+                }
+                catch (Exception ex)
+                {
+                    stopwatch.Stop();
+                    PrometheusMetrics.LockOperations.WithLabels("failed", contention).Inc();
+                    Console.WriteLine($"Lock failed ({contention}): {ex.Message}");
+                    return Response.Fail();
+                }
+            })
+            .WithoutWarmUp()
+            .WithLoadSimulations(
+                Simulation.KeepConstant(copies: 8, during: TimeSpan.FromSeconds(60))
+            );
+        }
 
         NBomberRunner
-            .RegisterScenarios(scenario)
+            .RegisterScenarios(
+                CreateLockScenario("lock_own_key", "own-key", sharedKey: false),
+                CreateLockScenario("lock_shared_key", "shared-key", sharedKey: true))
             .Run();
 
         Console.WriteLine("\n[Completed] Lock test finished. Check HTML report.\n");
@@ -270,6 +280,7 @@ public class Program
             var coordinator = serviceProvider.GetRequiredService<ICoordinator>();
             var resourceId = $"resource:{context.ScenarioInfo.InstanceNumber}";
 
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             try
             {
                 await coordinator.Lock.RunAsync(
@@ -277,10 +288,16 @@ public class Program
                     ttl: TimeSpan.FromSeconds(5),
                     action: async ct => await Task.Delay(50, ct)
                 );
+                stopwatch.Stop();
+                PrometheusMetrics.LockOperations.WithLabels("success", "own-key").Inc();
+                PrometheusMetrics.LockLatency.WithLabels("own-key").Observe(stopwatch.Elapsed.TotalSeconds);
+                PrometheusMetrics.OperationLatency.WithLabels("lock").Observe(stopwatch.Elapsed.TotalSeconds);
                 return Response.Ok();
             }
             catch
             {
+                stopwatch.Stop();
+                PrometheusMetrics.LockOperations.WithLabels("failed", "own-key").Inc();
                 return Response.Fail();
             }
         })
@@ -292,6 +309,7 @@ public class Program
             var coordinator = serviceProvider.GetRequiredService<ICoordinator>();
             var operationId = $"payment:{context.ScenarioInfo.InstanceNumber}";
 
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             try
             {
                 await coordinator.Idempotency.RunAsync(
@@ -299,10 +317,16 @@ public class Program
                     ttl: TimeSpan.FromMinutes(5),
                     action: async () => await Task.Delay(30)
                 );
+                stopwatch.Stop();
+                PrometheusMetrics.IdempotencyOperations.WithLabels("success").Inc();
+                PrometheusMetrics.IdempotencyLatency.Observe(stopwatch.Elapsed.TotalSeconds);
+                PrometheusMetrics.OperationLatency.WithLabels("idempotency").Observe(stopwatch.Elapsed.TotalSeconds);
                 return Response.Ok();
             }
             catch
             {
+                stopwatch.Stop();
+                PrometheusMetrics.IdempotencyOperations.WithLabels("failed").Inc();
                 return Response.Fail();
             }
         })
@@ -314,6 +338,7 @@ public class Program
             var coordinator = serviceProvider.GetRequiredService<ICoordinator>();
             var sagaId = $"order:{context.ScenarioInfo.InstanceNumber}";
 
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             try
             {
                 await coordinator.Saga.RunAsync(sagaId, async saga =>
@@ -321,10 +346,16 @@ public class Program
                     await saga.Step("step1", async () => await Task.Delay(20));
                     await saga.Step("step2", async () => await Task.Delay(30));
                 });
+                stopwatch.Stop();
+                PrometheusMetrics.SagaOperations.WithLabels("success").Inc();
+                PrometheusMetrics.SagaLatency.Observe(stopwatch.Elapsed.TotalSeconds);
+                PrometheusMetrics.OperationLatency.WithLabels("saga").Observe(stopwatch.Elapsed.TotalSeconds);
                 return Response.Ok();
             }
             catch
             {
+                stopwatch.Stop();
+                PrometheusMetrics.SagaOperations.WithLabels("failed").Inc();
                 return Response.Fail();
             }
         })
@@ -385,8 +416,9 @@ public class Program
         Console.WriteLine("  4. Mixed Workload Test");
         Console.WriteLine("  5. Run ALL Tests");
         Console.WriteLine("  6. Mapping Comparison (CHD vs AutoMapper)");
+        Console.WriteLine("  7. Logging Aspect Comparison (CHD vs Castle)");
         Console.WriteLine();
-        Console.Write("Select scenario (1-6): ");
+        Console.Write("Select scenario (1-7): ");
         return Console.ReadLine();
     }
 
@@ -395,8 +427,11 @@ public class Program
         "1" => "chd-lock",
         "2" => "chd-idempotency",
         "3" => "chd-saga",
+        "4" => "chd-mixed",
+        "5" => "chd-all",
         "6" => "chd-mapping",
-        _ => "chd-coordination"
+        "7" => "chd-logging",
+        _ => "chd-all"
     };
 
     private static void CheckAndStartMonitoring(string dashboardUid)

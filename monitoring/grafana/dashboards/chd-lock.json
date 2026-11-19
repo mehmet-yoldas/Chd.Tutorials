@@ -1,53 +1,278 @@
 {
-  "uid": "chd-lock",
-  "title": "Distributed Lock",
-  "tags": ["chd", "lock"],
-  "timezone": "browser",
-  "schemaVersion": 39,
-  "refresh": "5s",
-  "time": { "from": "now-15m", "to": "now" },
-  "panels": [
-    {
-      "datasource": "Prometheus",
-      "type": "timeseries",
-      "id": 1,
-      "title": "Lock operations per second",
-      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 0 },
-      "fieldConfig": {
-        "defaults": { "unit": "ops", "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 2, "showPoints": "never", "spanNulls": true } },
-        "overrides": []
-      },
-      "options": { "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "lastNotNull"] }, "tooltip": { "mode": "multi" } },
-      "targets": [
-        { "expr": "sum(rate(chd_lock_operations_total{status=\"success\"}[2m]))", "legendFormat": "success", "refId": "A" },
-        { "expr": "sum(rate(chd_lock_operations_total{status=\"failed\"}[2m]))", "legendFormat": "failed", "refId": "B" }
-      ]
-    },
-    {
-      "datasource": "Prometheus",
-      "type": "stat",
-      "id": 2,
-      "title": "Lock p95",
-      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
-      "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.1 }, { "color": "red", "value": 0.5 }] } }, "overrides": [] },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "value", "graphMode": "area", "textMode": "auto" },
-      "targets": [
-        { "expr": "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket[2m])))", "legendFormat": "p95", "refId": "A" }
-      ]
-    },
-    {
-      "datasource": "Prometheus",
-      "type": "timeseries",
-      "id": 3,
-      "title": "Lock latency p50 / p95 / p99",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
-      "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 8, "lineWidth": 2, "showPoints": "never", "spanNulls": true } }, "overrides": [] },
-      "options": { "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "lastNotNull"] }, "tooltip": { "mode": "multi" } },
-      "targets": [
-        { "expr": "histogram_quantile(0.50, sum by (le) (rate(chd_lock_duration_seconds_bucket[2m])))", "legendFormat": "p50", "refId": "A" },
-        { "expr": "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket[2m])))", "legendFormat": "p95", "refId": "B" },
-        { "expr": "histogram_quantile(0.99, sum by (le) (rate(chd_lock_duration_seconds_bucket[2m])))", "legendFormat": "p99", "refId": "C" }
-      ]
-    }
-  ]
+    "uid":  "chd-lock",
+    "title":  "Distributed Lock",
+    "tags":  [
+                 "chd",
+                 "lock"
+             ],
+    "timezone":  "browser",
+    "schemaVersion":  39,
+    "refresh":  "5s",
+    "time":  {
+                 "from":  "now-15m",
+                 "to":  "now"
+             },
+    "panels":  [
+                   {
+                       "datasource":  "Prometheus",
+                       "type":  "stat",
+                       "id":  800,
+                       "title":  "",
+                       "transparent":  true,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  0
+                                   },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "noValue":  "Please wait",
+                                                            "mappings":  [
+                                                                             {
+                                                                                 "type":  "value",
+                                                                                 "options":  {
+                                                                                                 "0":  {
+                                                                                                           "text":  " ",
+                                                                                                           "index":  0,
+                                                                                                           "color":  "transparent"
+                                                                                                       },
+                                                                                                 "1":  {
+                                                                                                           "text":  "Please wait",
+                                                                                                           "index":  1,
+                                                                                                           "color":  "#5794F2"
+                                                                                                       }
+                                                                                             }
+                                                                             }
+                                                                         ],
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "transparent",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "color":  {
+                                                                          "mode":  "fixed",
+                                                                          "fixedColor":  "text"
+                                                                      }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "orientation":  "auto",
+                                       "textMode":  "value",
+                                       "colorMode":  "value",
+                                       "graphMode":  "none",
+                                       "justifyMode":  "center",
+                                       "wideLayout":  true,
+                                       "text":  {
+                                                    "valueSize":  14
+                                                }
+                                   },
+                       "targets":  [
+                                       {
+                                           "expr":  "absent(chd_lock_operations_total) or vector(0)",
+                                           "refId":  "A",
+                                           "instant":  true
+                                       }
+                                   ]
+                   },
+                   {
+                       "datasource":  "Prometheus",
+                       "type":  "timeseries",
+                       "id":  1,
+                       "title":  "Saniyede biten kilit",
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  16,
+                                       "x":  0,
+                                       "y":  1
+                                   },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "unit":  "ops",
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  10,
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never",
+                                                                           "spanNulls":  true
+                                                                       }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ]
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"own-key\"}[2m]))",
+                                           "legendFormat":  "Kendi anahtarı",
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"shared-key\"}[2m]))",
+                                           "legendFormat":  "Ortak anahtar",
+                                           "refId":  "B"
+                                       }
+                                   ]
+                   },
+                   {
+                       "datasource":  "Prometheus",
+                       "type":  "stat",
+                       "id":  2,
+                       "title":  "Ortak anahtar, kendi anahtarına göre (p95)",
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  8,
+                                       "x":  16,
+                                       "y":  1
+                                   },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "unit":  "short",
+                                                            "decimals":  1,
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  2
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  4
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "colorMode":  "value",
+                                       "graphMode":  "none",
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m]))) / histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
+                                           "legendFormat":  "kat",
+                                           "refId":  "A"
+                                       }
+                                   ]
+                   },
+                   {
+                       "datasource":  "Prometheus",
+                       "type":  "timeseries",
+                       "id":  3,
+                       "title":  "Kilit süresi: kendi anahtarı ile ortak anahtar",
+                       "gridPos":  {
+                                       "h":  9,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  9
+                                   },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "unit":  "s",
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  8,
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never",
+                                                                           "spanNulls":  true
+                                                                       }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ]
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "expr":  "histogram_quantile(0.50, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
+                                           "legendFormat":  "Kendi anahtarı, tipik (p50)",
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
+                                           "legendFormat":  "Kendi anahtarı, yavaş (p95)",
+                                           "refId":  "B"
+                                       },
+                                       {
+                                           "expr":  "histogram_quantile(0.50, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m])))",
+                                           "legendFormat":  "Ortak anahtar, tipik (p50)",
+                                           "refId":  "C"
+                                       },
+                                       {
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m])))",
+                                           "legendFormat":  "Ortak anahtar, yavaş (p95)",
+                                           "refId":  "D"
+                                       }
+                                   ]
+                   }
+               ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   }
 }

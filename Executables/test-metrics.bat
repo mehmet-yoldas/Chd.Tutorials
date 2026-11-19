@@ -27,7 +27,7 @@ echo.
 
 echo [5] Opening Grafana dashboard...
 timeout /t 3 /nobreak >nul
-start http://localhost:3000/d/chd-coordination
+start http://localhost:3000
 echo.
 
 echo ============================================
