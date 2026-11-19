@@ -98,10 +98,10 @@ public class Program
 
     private static void RunLockTest()
     {
-        Console.WriteLine("\n[Running] Distributed Lock Load Test...\n");
-        Console.WriteLine("   Aynı 50 ms iş, iki kilit türü:");
-        Console.WriteLine("   • Kendi anahtarı: her istek ayrı kilit alır, kimseyle beklemez.");
-        Console.WriteLine("   • Ortak anahtar: bütün istekler aynı kilidi bekler.");
+        Console.WriteLine("\n[Running] Distributed Lock Load Test (Chd.Coordination)...\n");
+        Console.WriteLine("   Same 50 ms work, two lock types:");
+        Console.WriteLine("   • Own key: each request takes a separate lock and waits for nobody.");
+        Console.WriteLine("   • Shared key: every request waits on the same lock.");
         Console.WriteLine();
 
         var serviceProvider = CreateServiceProvider();
@@ -410,7 +410,7 @@ public class Program
         }
 
         Console.WriteLine("Available scenarios:");
-        Console.WriteLine("  1. Distributed Lock Performance Test");
+        Console.WriteLine("  1. Distributed Lock (Chd.Coordination)");
         Console.WriteLine("  2. Idempotency Performance Test");
         Console.WriteLine("  3. Saga Performance Test");
         Console.WriteLine("  4. Mixed Workload Test");

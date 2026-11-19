@@ -1,6 +1,6 @@
 {
     "uid":  "chd-lock",
-    "title":  "Distributed Lock",
+    "title":  "Distributed Lock — Chd.Coordination",
     "tags":  [
                  "chd",
                  "lock"
@@ -93,7 +93,7 @@
                        "datasource":  "Prometheus",
                        "type":  "timeseries",
                        "id":  1,
-                       "title":  "Saniyede biten kilit",
+                       "title":  "Locks completed per second",
                        "gridPos":  {
                                        "h":  8,
                                        "w":  16,
@@ -134,12 +134,12 @@
                        "targets":  [
                                        {
                                            "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"own-key\"}[2m]))",
-                                           "legendFormat":  "Kendi anahtarı",
+                                           "legendFormat":  "Own key",
                                            "refId":  "A"
                                        },
                                        {
                                            "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"shared-key\"}[2m]))",
-                                           "legendFormat":  "Ortak anahtar",
+                                           "legendFormat":  "Shared key",
                                            "refId":  "B"
                                        }
                                    ]
@@ -148,7 +148,7 @@
                        "datasource":  "Prometheus",
                        "type":  "stat",
                        "id":  2,
-                       "title":  "Ortak anahtar, kendi anahtarına göre (p95)",
+                       "title":  "Shared key relative to own key (p95)",
                        "gridPos":  {
                                        "h":  8,
                                        "w":  8,
@@ -199,7 +199,7 @@
                        "targets":  [
                                        {
                                            "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m]))) / histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
-                                           "legendFormat":  "kat",
+                                           "legendFormat":  "times",
                                            "refId":  "A"
                                        }
                                    ]
@@ -208,7 +208,7 @@
                        "datasource":  "Prometheus",
                        "type":  "timeseries",
                        "id":  3,
-                       "title":  "Kilit süresi: kendi anahtarı ile ortak anahtar",
+                       "title":  "Lock duration: own key and shared key",
                        "gridPos":  {
                                        "h":  9,
                                        "w":  24,
@@ -249,22 +249,22 @@
                        "targets":  [
                                        {
                                            "expr":  "histogram_quantile(0.50, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
-                                           "legendFormat":  "Kendi anahtarı, tipik (p50)",
+                                           "legendFormat":  "Own key, typical (p50)",
                                            "refId":  "A"
                                        },
                                        {
                                            "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
-                                           "legendFormat":  "Kendi anahtarı, yavaş (p95)",
+                                           "legendFormat":  "Own key, slow (p95)",
                                            "refId":  "B"
                                        },
                                        {
                                            "expr":  "histogram_quantile(0.50, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m])))",
-                                           "legendFormat":  "Ortak anahtar, tipik (p50)",
+                                           "legendFormat":  "Shared key, typical (p50)",
                                            "refId":  "C"
                                        },
                                        {
                                            "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m])))",
-                                           "legendFormat":  "Ortak anahtar, yavaş (p95)",
+                                           "legendFormat":  "Shared key, slow (p95)",
                                            "refId":  "D"
                                        }
                                    ]

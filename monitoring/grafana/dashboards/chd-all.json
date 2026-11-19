@@ -92,7 +92,7 @@
                    {
                        "type":  "row",
                        "id":  10,
-                       "title":  "Distributed lock",
+                       "title":  "Distributed lock — Chd.Coordination",
                        "collapsed":  false,
                        "gridPos":  {
                                        "h":  1,
@@ -149,12 +149,12 @@
                        "targets":  [
                                        {
                                            "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"own-key\"}[2m]))",
-                                           "legendFormat":  "Kendi anahtarı",
+                                           "legendFormat":  "Own key",
                                            "refId":  "A"
                                        },
                                        {
                                            "expr":  "sum(rate(chd_lock_operations_total{status=\"success\",contention=\"shared-key\"}[2m]))",
-                                           "legendFormat":  "Ortak anahtar",
+                                           "legendFormat":  "Shared key",
                                            "refId":  "B"
                                        }
                                    ]
@@ -163,7 +163,7 @@
                        "datasource":  "Prometheus",
                        "type":  "stat",
                        "id":  12,
-                       "title":  "Ortak / kendi anahtar p95",
+                       "title":  "Shared / own key p95",
                        "gridPos":  {
                                        "h":  8,
                                        "w":  8,
@@ -194,7 +194,7 @@
                        "targets":  [
                                        {
                                            "expr":  "histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"shared-key\"}[2m]))) / histogram_quantile(0.95, sum by (le) (rate(chd_lock_duration_seconds_bucket{contention=\"own-key\"}[2m])))",
-                                           "legendFormat":  "kat",
+                                           "legendFormat":  "times",
                                            "refId":  "A"
                                        }
                                    ]

@@ -37,7 +37,7 @@ public sealed class ChdLoggedSum
 {
     public Microsoft.AspNetCore.Http.HttpContext? HttpContext { get; set; }
 
-    [LoggedEntry]
+    [Logged(AspectType.OnEntry)]
     public int Sum(int a, int b) => a + b;
 }
 
@@ -135,16 +135,16 @@ public static class LoggingComparisonTest
     public static void Run()
     {
         Console.WriteLine("\n[Running] Logging aspect comparison (CHD vs Castle)...\n");
-        Console.WriteLine("   Aynı metod. Giriş ve hata. Aynı Serilog alanları, ayrı dosyalar.");
-        Console.WriteLine("   • CHD: [LoggedEntry] ve [Logged(AspectType.OnException)]");
+        Console.WriteLine("   Same method. Entry and exception. Same Serilog fields, separate files.");
+        Console.WriteLine("   • CHD: [Logged(AspectType.OnEntry)] and [Logged(AspectType.OnException)]");
         Console.WriteLine("   • Castle: DynamicProxy interceptor");
         Console.WriteLine("   Grafana: http://localhost:3000/d/chd-logging");
         Console.WriteLine();
 
         EnsureWoven();
         var (chdLog, castleLog) = ConfigureFileLogger();
-        Console.WriteLine($"   CHD dosyası:    {chdLog}");
-        Console.WriteLine($"   Castle dosyası: {castleLog}");
+        Console.WriteLine($"   CHD file:    {chdLog}");
+        Console.WriteLine($"   Castle file: {castleLog}");
         Console.WriteLine();
 
         var chd = new ChdLoggedSum();
